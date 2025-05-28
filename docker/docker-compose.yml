@@ -1,0 +1,74 @@
+name: djalon
+services:
+  app:
+    image: DOCKER_DEPLOY_APP_IMAGE
+    container_name: djalon_app
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
+    ports:
+      - 3000:3000
+  cron:
+    image: DOCKER_DEPLOY_CRONS_IMAGE
+    container_name: djalon_crons
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
+  doc:
+    image: DOCKER_DEPLOY_DOCS_IMAGE
+    container_name: djalon_doc
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
+    ports:
+      - 3001:3000
+    volumes:
+      - .:/docs/.docusaurus
+  landing:
+    image: DOCKER_DEPLOY_LANDING_IMAGE
+    container_name: djalon_landing
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
+    ports:
+      - 3002:3000
+  db:
+    image: postgres:latest
+    container_name: djalon_db
+    restart: unless-stopped
+    volumes:
+      - djalon-postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASS}
+      POSTGRES_DB: ${DATABASE_NAME}
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
+    ports:
+      - 5432:5432
+  redis:
+    image: redis:latest
+    restart: unless-stopped
+    container_name: djalon_redis
+    command: /bin/sh -c "redis-server --requirepass ${REDIS_PASSWORD}"
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
+    volumes:
+      - djalon-redis-data:/data
+    ports:
+      - 6379:6379
+volumes:
+  djalon-postgres-data: null
+  djalon-redis-data: null

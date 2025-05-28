@@ -1,0 +1,34 @@
+name: djalon
+services:
+  db:
+    image: postgres:latest
+    container_name: djalon_db
+    restart: unless-stopped
+    volumes:
+      - djalon-postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
+    ports:
+      - 5432:5432
+  redis:
+    image: redis:latest
+    restart: unless-stopped
+    container_name: djalon_redis
+    command: /bin/sh -c "redis-server"
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
+    volumes:
+      - djalon-redis-data:/data
+    ports:
+      - 6379:6379
+volumes:
+  djalon-postgres-data: null
+  djalon-redis-data: null

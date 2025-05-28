@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  //"extends": "../../packages/configs/tsconfig/next.json",
+  "extends": "@djalon/tsconfig/next.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "allowJs": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.mjs", ".next/types/**/*.ts", "tailwind.config.js", "src"],
+  "exclude": ["node_modules"]
+}
